@@ -1,1 +1,4 @@
-Party Ping is a node server which hosts a pong multiplayer web app.
+#Party Ping
+a pong-style multiplayer web app hosted on a node server
+
+Server hosts the web app on port 80. Subsequent connections use socket.io for communication. 
