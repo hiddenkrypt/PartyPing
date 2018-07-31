@@ -5,6 +5,8 @@ const app = express();
 const http = require ( 'http' ).Server( app );
 const io = require( 'socket.io' )( http, { origins: '*:*'} );
 
+var players = [];
+const game = require( "partyping.js" )(players);
 app.use( express.static( "pub" ) );
 
 http.listen( 80, function() {
