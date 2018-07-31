@@ -4,7 +4,6 @@
   "description": "Multiplayer pong-like game",
   "main": "server.js",
   "scripts": {
-    "test": "test.js",
     "start": "node server.js"
   },
   "repository": {
@@ -19,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/hiddenkrypt/PartyPing/issues"
   },
-  "homepage": "https://github.com/hiddenkrypt/PartyPing#readme"
+  "homepage": "https://github.com/hiddenkrypt/PartyPing#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socketio": "^1.0.0"
+  }
 }
