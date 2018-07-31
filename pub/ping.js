@@ -1,14 +1,15 @@
 
 
 window.onload = function(){
-  var canvas;
-  var ctx;
+  const canvas = document.getElementById("c");
+  const ctx = canvas.getContext("2d");
+  const namefield =  document.getElementById("namefield");
+  const joinButton =  document.getElementById("join");
+  const error =  document.getElementById("error");
   var gameState = {
     balls:[],
     paddles:[]
   };
-  canvas = document.getElementById("c");
-  ctx = canvas.getContext("2d");
   canvas.width = 600;
   canvas.height = 600;
 
@@ -17,6 +18,16 @@ window.onload = function(){
     socket.on("gamestate", (gm)=>{
       gameState = gm;
     });
+    joinButton.addEventListener("mousedown", ()=>{
+      console.log("joining with name: "+namefield.value);
+      socket.emit("attemptJoin", namefield.value);
+      socket.on("rejected", (response)=>{
+        console.log("REJECTED");
+        console.log(response);
+        error.innerHTML = response.reason;
+      });
+    });
+
   }
   catch(e){
     console.log("something happened");
