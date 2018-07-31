@@ -1,0 +1,23 @@
+{
+  "name": "partyping",
+  "version": "0.0.1",
+  "description": "Multiplayer pong-like game",
+  "main": "server.js",
+  "scripts": {
+    "test": "test.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiddenkrypt/PartyPing.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Rav-T",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/hiddenkrypt/PartyPing/issues"
+  },
+  "homepage": "https://github.com/hiddenkrypt/PartyPing#readme"
+}
