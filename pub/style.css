@@ -12,8 +12,13 @@
 }
 #joinContainer{
   color: #efefef;
-  width: fit-content;
+  width: 30%;
   background-color: rgba(0,0,0,.6);
+  text-align: center;
+}
+#error {
+  color: #a10000;
+  font-weight:bold;
 }
 #world{
   position:absolute;
