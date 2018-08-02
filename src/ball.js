@@ -7,6 +7,10 @@ module.exports = function(){
   this.tick = function(){
     this.x += this.dx;
     this.y += this.dy;
+    if(this.x-this.radius/2 <= 0 || this.x+this.radius/2 >= 600){
+      this.x -= this.dx;
+      this.dx = -this.dx;
+    }
   };
   this.radius = 5;
   this.collideBox = function(box){
