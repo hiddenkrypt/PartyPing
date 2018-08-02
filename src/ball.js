@@ -1,4 +1,4 @@
-const collisions = require("collisions.js");
+const collisions = require("./collisions.js");
 module.exports = function(){
   this.x = 300;
   this.y = 300;
