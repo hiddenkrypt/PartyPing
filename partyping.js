@@ -14,12 +14,14 @@ const TEAMS = {
   north: {
     layers:[20, 80, 120],
     concessions:0,
-    players: []
+    players: [],
+    startLayer: 0
   },
   south: {
-    layers:[PARAMETERS.height-20, PARAMETERS.height-80, PARAMETERS.height-120],
+    layers:[PARAMETERS.height-120, PARAMETERS.height-80,PARAMETERS.height-20],
     concessions:0,
-    players: []
+    players: [],
+    startLayer: 2
   }
 };
 module.exports = function(){
@@ -63,7 +65,17 @@ var players = {
     TEAMS.north.players.concat(TEAMS.south.players).sort(Math.random()>0.5).forEach((p)=>p.tick());
   },
   update: function(){
-    TEAMS.north.players.concat(TEAMS.south.players).sort(Math.random()>0.5).forEach((p)=>p.update());
+    var gameState = {
+      balls: balls.ballPile.map(ball=>{
+        return {x:ball.x, y:ball.y, size: ball.radius};
+      }),
+      paddles: teams.north.players.concat(teams.south.players).map(player=>{
+        return {x:player.x, y:player.y,w:player.w, h:player.h, name:player.name};
+      })
+    };
+    TEAMS.north.players.concat(TEAMS.south.players).sort(Math.random()>0.5).forEach((p)=>{
+      p.socket.emit("gamestate", gameState);
+    });
   },
   count: function(){
     return TEAMS.north.players.length + TEAMS.south.players.length;
@@ -81,8 +93,7 @@ var balls = {
 function gameLogic(){
   balls.tick();
   players.tick();
-  players.update();
-
+//  players.update(balls,TEAMS);
   if(players.length >= 1){
     setTimeout(gameLogic, 1000/PARAMETERS.hz);
   }
