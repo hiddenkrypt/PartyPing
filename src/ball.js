@@ -7,7 +7,7 @@ module.exports = function(){
   this.tick = function(){
     this.x += this.dx;
     this.y += this.dy;
-    if(this.x-this.radius/2 <= 0 || this.x+this.radius/2 >= 600){
+    if(this.x-this.radius <= 0 || this.x+this.radius >= 600){
       this.x -= this.dx;
       this.dx = -this.dx;
     }
