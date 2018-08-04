@@ -62,14 +62,14 @@ function addNewPlayer(socket, name){
 
 var players = {
   tick: function(){
-    TEAMS.north.players.concat(TEAMS.south.players).sort(Math.random()>0.5).forEach((p)=>p.tick());
+    TEAMS.north.players.concat(TEAMS.south.players).forEach((p)=>p.tick());
   },
   update: function(){
     var gameState = {
       balls: balls.ballPile.map(ball=>{
         return {x:ball.x, y:ball.y, size: ball.radius};
       }),
-      paddles: teams.north.players.concat(teams.south.players).map(player=>{
+      paddles: TEAMS.north.players.concat(TEAMS.south.players).map(player=>{
         return {x:player.x, y:player.y,w:player.w, h:player.h, name:player.name};
       })
     };
@@ -88,14 +88,19 @@ var balls = {
   },
   tick: function(){
     this.ballPile.forEach(ball=>ball.tick());
+    while(this.ballPile.length < players.count / 2){
+      this.ballPile.push(new Ball());
+    }
   }
 };
 function gameLogic(){
   balls.tick();
   players.tick();
-//  players.update(balls,TEAMS);
+  players.update();
   if(players.length >= 1){
     setTimeout(gameLogic, 1000/PARAMETERS.hz);
+  } else {
+    balls.ballPile = [];
   }
 }
 gameLogic();
