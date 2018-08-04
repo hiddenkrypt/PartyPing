@@ -4,11 +4,11 @@ const Player = require("./src/player.js");
 const GAME_SETTINGS = {
   gamefield:{
     width: 600,
-    height:600,
-    paddleCapacity: 150
+    height:600
   },
   playerMax:Number.POSITIVE_INFINITY,
-  hz: 3
+  hz: 3,
+  paddleCapacity: 150
 };
 const TEAMS = {
   north: {
@@ -58,6 +58,9 @@ function addNewPlayer(socket, name){
     TEAMS[newPlayer.team].players = TEAMS[newPlayer.team].players.filter((player)=> player.name !== newPlayer.name);
   });
   TEAMS[newPlayer.team].players.push(newPlayer);
+  TEAMS[newPlayer.team].players.forEach(player=>{
+    player.w = GAME_SETTINGS.paddleCapacity/TEAMS[newPlayer.team].players.length;
+  });
   if(players.count() === 1){
     gameLogic();
   }
