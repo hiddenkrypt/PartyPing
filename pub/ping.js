@@ -39,11 +39,12 @@ window.onload = function(){
     ctx.fillRect(0,0,canvas.width, canvas.height);
     ctx.fillStyle = "#fff";
     gameState.balls.forEach((ball)=>{
-      ctx.fillRect(ball.x, ball.y, ball.size, ball.size);
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.size,0,2*Math.PI);
+      ctx.fill();
     });
     gameState.paddles.forEach((paddle)=>{
-      ctx.fillStyle = paddle.style;
-      ctx.fillRect(paddle.x,paddle.y,paddle.width,paddle.height);
+      ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
     });
     requestAnimationFrame(render);
   }
