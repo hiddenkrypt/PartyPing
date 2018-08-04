@@ -95,7 +95,7 @@ var balls = {
   },
   tick: function(){
     this.ballPile.forEach(ball=>ball.tick());
-    while(this.ballPile.length < players.count / 2){
+    while(this.ballPile.length < players.count() / 2){
       this.ballPile.push(new Ball());
     }
   }
