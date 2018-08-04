@@ -25,7 +25,7 @@ setTimeout(()=>{
     console.log("All cleaned up");
     process.exit();
   });
-}, 10*1000);
+}, 2*60*1000);
 
 console.log("server running. Press 'q' then enter to quit.");
 var keypress = require('keypress');
@@ -39,6 +39,8 @@ process.stdin.on('keypress', function (ch, key) {
       });
   }
 });
+
+
 process.on('SIGINT', function() {
     console.log("Caught interrupt signal");
     SERVER.shutdown(()=>{

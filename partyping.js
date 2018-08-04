@@ -1,14 +1,14 @@
 
 const Ball = require("./src/ball.js");
 const Player = require("./src/player.js");
-const PARAMETERS = {
+const GAME_SETTINGS = {
   gamefield:{
     width: 600,
     height:600,
     paddleCapacity: 150
   },
   playerMax:Number.POSITIVE_INFINITY,
-  hz: 60
+  hz: 3
 };
 const TEAMS = {
   north: {
@@ -18,7 +18,7 @@ const TEAMS = {
     startLayer: 0
   },
   south: {
-    layers:[PARAMETERS.height-120, PARAMETERS.height-80,PARAMETERS.height-20],
+    layers:[GAME_SETTINGS.gamefield.height-120, GAME_SETTINGS.gamefield.height-80,GAME_SETTINGS.gamefield.height-20],
     concessions:0,
     players: [],
     startLayer: 2
@@ -35,7 +35,7 @@ module.exports = function(){
       console.log("rejecting: name taken");
       socket.emit("rejected", {reason: "Another player is using that name!"});
     }
-    else if(players.size >= PARAMETERS.playerMax){
+    else if(players.size >= GAME_SETTINGS.playerMax){
       console.log("rejecting: server full");
       socket.emit("rejected", {reason: "Server is full!"});
     } else{
@@ -51,13 +51,16 @@ module.exports = function(){
 
 
 function addNewPlayer(socket, name){
-  var newPlayer = new Player(socket,name,TEAMS,PARAMETERS);
+  var newPlayer = new Player(socket,name,TEAMS,GAME_SETTINGS);
   socket.on( "disconnect", function() {
     console.log( `Client ${newPlayer.name} disconnected` );
     newPlayer.socket = null;
     TEAMS[newPlayer.team].players = TEAMS[newPlayer.team].players.filter((player)=> player.name !== newPlayer.name);
   });
   TEAMS[newPlayer.team].players.push(newPlayer);
+  if(players.count() === 1){
+    gameLogic();
+  }
 }
 
 var players = {
@@ -70,10 +73,11 @@ var players = {
         return {x:ball.x, y:ball.y, size: ball.radius};
       }),
       paddles: TEAMS.north.players.concat(TEAMS.south.players).map(player=>{
+      //  console.log(player);
         return {x:player.x, y:player.y,w:player.w, h:player.h, name:player.name};
       })
     };
-    TEAMS.north.players.concat(TEAMS.south.players).sort(Math.random()>0.5).forEach((p)=>{
+    TEAMS.north.players.concat(TEAMS.south.players).forEach((p)=>{
       p.socket.emit("gamestate", gameState);
     });
   },
@@ -97,10 +101,10 @@ function gameLogic(){
   balls.tick();
   players.tick();
   players.update();
-  if(players.length >= 1){
-    setTimeout(gameLogic, 1000/PARAMETERS.hz);
+  if(players.count() >= 1){
+    setTimeout(gameLogic, 1000/GAME_SETTINGS.hz);
   } else {
+
     balls.ballPile = [];
   }
 }
-gameLogic();
