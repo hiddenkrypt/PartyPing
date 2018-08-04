@@ -1,24 +1,23 @@
 module.exports = function(socket,name,teams,gameSettings){
   this.name = name;
   this.socket = socket;
-  if(teams.north.players.size === teams.south.players.size){
+  if(teams.north.players.length === teams.south.players.length){
     this.team = Math.random() < 0.5? "north": "south";
-  } else if(teams.north.players.size > teams.south.players.size){
+  } else if(teams.north.players.length > teams.south.players.length){
     this.team = "south";
   } else {
     this.team = "north";
   }
-
-  console.log(`player ${this.name} assigned to team: ${this.team}`);
+  console.log(`new player ${this.name} assigned to team: ${this.team}`);
   this.move = null;
   this.layer = teams[this.team].startLayer;
   this.w = 0;
   this.h = 15;
-  this.x = gameSettings.width/2 - this.w/2;
+  this.x = gameSettings.gamefield.width/2 - this.w/2;
   this.y = teams[this.team].layers[this.layer];
-
   this.dx = 0;
   this.dy = 0;
+
   this.tick = function(){
     this.x += this.dx;
     if(this.x >= gameSettings.gamefield.width || this.x <= 0){
