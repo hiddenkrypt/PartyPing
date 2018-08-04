@@ -22,6 +22,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "http-shutdown": "^1.2.0",
+    "keypress": "^0.2.1",
     "socketio": "^1.0.0"
   }
 }
