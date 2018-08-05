@@ -3,9 +3,11 @@
 window.onload = function(){
   const canvas = document.getElementById("c");
   const ctx = canvas.getContext("2d");
+  const overlay = document.getElementById("overlay");
   const namefield =  document.getElementById("namefield");
   const joinButton =  document.getElementById("join");
   const error =  document.getElementById("error");
+  const socket = io();
   var gameState = {
     balls:[],
     paddles:[]
@@ -13,27 +15,27 @@ window.onload = function(){
   canvas.width = 600;
   canvas.height = 600;
 
-  try{
-    const socket = io();
-    socket.on("gamestate", (gm)=>{
-      gameState = gm;
-    });
-    joinButton.addEventListener("mousedown", ()=>{
-      console.log("joining with name: "+namefield.value);
-      socket.emit("attemptJoin", namefield.value);
-      socket.on("rejected", (response)=>{
-        console.log("REJECTED");
-        console.log(response);
-        error.innerHTML = response.reason;
-      });
-    });
+  socket.on("gamestate", (gm)=>{
+    gameState = gm;
+  });
+  socket.on("accepted", (response)=>{
+    console.log("accepted to team: "+response.team);
+    overlay.style.display = "none";
+    joinButton.removeEventListener(clickToJoin);
+    window.addEventListener("keydown", handleKeyInput);
+  });
+  socket.on("rejected", (response)=>{
+    error.innerHTML = response.reason;
+  });
 
+  joinButton.addEventListener("mousedown", clickToJoin);
+
+  function clickToJoin(){
+    socket.emit("attemptJoin", namefield.value);
   }
-  catch(e){
-    console.log("something happened");
-    console.log(e);
+  function handleKeyInput(event){
+    socket.emit("move", event.key);
   }
-  render();
   function render(){
     ctx.fillStyle="#000";
     ctx.fillRect(0,0,canvas.width, canvas.height);
@@ -48,4 +50,6 @@ window.onload = function(){
     });
     requestAnimationFrame(render);
   }
+
+  render();
 };
