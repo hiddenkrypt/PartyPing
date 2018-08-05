@@ -64,6 +64,7 @@ function addNewPlayer(socket, name){
   if(players.count() === 1){
     gameLogic();
   }
+  socket.emit("accepted", {team: newPlayer.team});
 }
 
 var players = {
