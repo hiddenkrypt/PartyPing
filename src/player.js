@@ -9,7 +9,6 @@ module.exports = function(socket,name,teams,gameSettings){
     this.team = "north";
   }
   console.log(`new player ${this.name} assigned to team: ${this.team}`);
-  this.move = null;
   this.layer = teams[this.team].startLayer;
   this.w = 0;
   this.h = 15;
@@ -26,10 +25,12 @@ module.exports = function(socket,name,teams,gameSettings){
     if(this.dy > 0 && this.y != teams[this.team].layers[0] && this.layer != 0){
       this.layer -= 1;
       this.y = teams[this.team].layers[this.layer];
+      this.dy = 0;
     }
     if(this.dy < 0 && this.y != teams[this.team].layers[2] && this.layer != 2){
       this.layer += 1;
       this.y = teams[this.team].layers[this.layer];
+      this.dy = 0;
     }
   };
 };

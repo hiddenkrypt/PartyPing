@@ -21,8 +21,9 @@ window.onload = function(){
   socket.on("accepted", (response)=>{
     console.log("accepted to team: "+response.team);
     overlay.style.display = "none";
-    joinButton.removeEventListener(clickToJoin);
+    joinButton.removeEventListener("mousedown", clickToJoin);
     window.addEventListener("keydown", handleKeyInput);
+    window.addEventListener("keyup", handleKeyInputRelease);
   });
   socket.on("rejected", (response)=>{
     error.innerHTML = response.reason;
@@ -38,7 +39,15 @@ window.onload = function(){
       event.key === "ArrowUp" || event.key === "ArrowDown" ||
       event.key === "d" || event.key === "a" ||
       event.key === "w" || event.key === "s" ){
-      socket.emit("move", event.key);
+      socket.emit("sustain", event.key);
+    }
+  }
+  function handleKeyInputRelease(event){
+    if(event.key === "ArrowRight" || event.key === "ArrowLeft" ||
+      event.key === "ArrowUp" || event.key === "ArrowDown" ||
+      event.key === "d" || event.key === "a" ||
+      event.key === "w" || event.key === "s" ){
+      socket.emit("release", event.key);
     }
   }
   function render(){

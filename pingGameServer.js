@@ -7,7 +7,7 @@ const GAME_SETTINGS = {
     height:600
   },
   playerMax:Number.POSITIVE_INFINITY,
-  hz: 3,
+  hz: 20,
   paddleCapacity: 150
 };
 const TEAMS = {
@@ -64,6 +64,34 @@ function addNewPlayer(socket, name){
   if(players.count() === 1){
     gameLogic();
   }
+  socket.on("sustain", function(key){
+    switch(key){
+      case "ArrowRight": case "d":
+        newPlayer.dx = 2;
+        break;
+      case "ArrowLeft": case "a":
+        newPlayer.dx = -2;
+        break;
+      case "ArrowUp": case "w":
+        newPlayer.dy = 1;
+        break;
+      case "ArrowDown": case "s":
+        newPlayer.dy = -1;
+        break;
+    }
+  });
+  socket.on("release", function(key){
+    switch(key){
+      case "ArrowRight": case "d":
+      case "ArrowLeft": case "a":
+        newPlayer.dx = 0;
+        break;
+      case "ArrowUp": case "w":
+      case "ArrowDown": case "s":
+        newPlayer.dy = 0;
+        break;
+    }
+  });
   socket.emit("accepted", {team: newPlayer.team});
 }
 
