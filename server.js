@@ -5,7 +5,7 @@ const APP = EXPRESS();
 const HTTP = require ( 'http' ).Server( APP );
 const IO = require( 'socket.io' )( HTTP, { origins: '*:*'} );
 const SERVER = require('http-shutdown')(HTTP);
-const GAME = require( "./partyping.js" )();
+const GAME = require( "./pingGameServer.js" )();
 APP.use( EXPRESS.static( "pub" ) );
 
 

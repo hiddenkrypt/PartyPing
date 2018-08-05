@@ -34,7 +34,12 @@ window.onload = function(){
     socket.emit("attemptJoin", namefield.value);
   }
   function handleKeyInput(event){
-    socket.emit("move", event.key);
+    if(event.key === "ArrowRight" || event.key === "ArrowLeft" ||
+      event.key === "ArrowUp" || event.key === "ArrowDown" ||
+      event.key === "d" || event.key === "a" ||
+      event.key === "w" || event.key === "s" ){
+      socket.emit("move", event.key);
+    }
   }
   function render(){
     ctx.fillStyle="#000";
