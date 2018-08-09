@@ -19,7 +19,7 @@ module.exports = function(socket,name,teams,gameSettings){
 
   this.tick = function(){
     this.x += this.dx;
-    if(this.x >= gameSettings.gamefield.width || this.x <= 0){
+    if(this.x+this.w >= gameSettings.gamefield.width || this.x <= 0){
       this.x -= this.dx;
     }
     if(this.dy > 0 && this.y != teams[this.team].layers[0] && this.layer != 0){

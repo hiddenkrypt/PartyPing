@@ -4,6 +4,6 @@ module.exports = {
     height:600
   },
   playerMax:Number.POSITIVE_INFINITY,
-  hz: 20,
+  hz: 50,
   paddleCapacity: 150
 };

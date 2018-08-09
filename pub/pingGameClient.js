@@ -14,6 +14,7 @@ window.onload = function(){
     balls:[],
     paddles:[]
   };
+  var myName = "";
   canvas.width = 600;
   canvas.height = 600;
 
@@ -24,6 +25,7 @@ window.onload = function(){
   });
   socket.on("accepted", (response)=>{
     console.log("accepted to team: "+response.team);
+    myName = response.name;
     overlay.style.display = "none";
     joinButton.removeEventListener("mousedown", clickToJoin);
     window.addEventListener("keydown", handleKeyInput);
@@ -65,13 +67,14 @@ window.onload = function(){
     ctx.fillRect(0,canvas.height-75,canvas.width,1);
     ctx.fillRect(0,canvas.height-115,canvas.width,1);
     ctx.fillStyle = "#fff";
+    gameState.paddles.forEach((paddle)=>{
+      ctx.fillStyle = (paddle.name === myName)?"#00ff00":"#fff";
+      ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
+    });
     gameState.balls.forEach((ball)=>{
       ctx.beginPath();
       ctx.arc(ball.x, ball.y, ball.size,0,2*Math.PI);
       ctx.fill();
-    });
-    gameState.paddles.forEach((paddle)=>{
-      ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
     });
     requestAnimationFrame(render);
   }

@@ -1,8 +1,8 @@
 
-const Ball = require("./src/ball.js");
-const Player = require("./src/player.js");
-const GAME_SETTINGS = require("./src/gameSettings.js");
-const teams = require("./src/teams.js")(GAME_SETTINGS);
+const Ball = require("./ball.js");
+const Player = require("./player.js");
+const GAME_SETTINGS = require("./gameSettings.js");
+const teams = require("./teams.js")(GAME_SETTINGS);
 
 module.exports = function(){
   return {
@@ -70,7 +70,7 @@ function addNewPlayer(socket, name){
         break;
     }
   });
-  socket.emit("accepted", {team: newPlayer.team});
+  socket.emit("accepted", {team: newPlayer.team, name: newPlayer.name});
 }
 
 var players = {
@@ -136,7 +136,6 @@ function gameLogic(){
   if(players.count() >= 1){
     setTimeout(gameLogic, 1000/GAME_SETTINGS.hz);
   } else {
-
     balls.ballPile = [];
   }
 }

@@ -5,7 +5,7 @@ const APP = EXPRESS();
 const HTTP = require ( 'http' ).Server( APP );
 const IO = require( 'socket.io' )( HTTP, { origins: '*:*'} );
 const SERVER = require('http-shutdown')(HTTP);
-const GAME = require( "./pingGameServer.js" )();
+const GAME = require( "./src/pingGameServer.js" )();
 APP.use( EXPRESS.static( "pub" ) );
 
 
@@ -20,12 +20,12 @@ IO.on ("connect", function( socket ) {
   });
 });
 
-setTimeout(()=>{
-  SERVER.shutdown(()=>{
-    console.log("All cleaned up");
-    process.exit();
-  });
-}, 2*60*1000);
+// setTimeout(()=>{
+//   SERVER.shutdown(()=>{
+//     console.log("All cleaned up");
+//     process.exit();
+//   });
+// }, 2*60*1000);
 
 console.log("server running. Press 'q' then enter to quit.");
 var keypress = require('keypress');

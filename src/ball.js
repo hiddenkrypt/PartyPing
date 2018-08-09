@@ -1,9 +1,17 @@
 const collisions = require("./collisions.js");
+function randomDelta(){
+  var roll = (Math.random()-0.5)*10;
+  if(Math.abs(roll)<2){
+    roll = 2*(roll<0?-1:1);
+  }
+  return roll;
+}
 module.exports = function(){
   this.x = 300;
   this.y = 300;
-  this.dx = Math.random()*10;
-  this.dy = (Math.random()-.5)*20;
+  this.dx = randomDelta();
+  this.dy = randomDelta();
+
   this.tick = function(){
     this.x += this.dx;
     this.y += this.dy;
