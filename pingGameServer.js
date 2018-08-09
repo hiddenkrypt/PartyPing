@@ -93,6 +93,9 @@ var players = {
   },
   count: function(){
     return teams.north.players.length + teams.south.players.length;
+  },
+  forEach: function(fn){
+    teams.north.players.concat(teams.south.players).forEach(fn);
   }
 };
 
@@ -102,7 +105,13 @@ var balls = {
     return this.ballPile.length;
   },
   tick: function(){
-    this.ballPile.forEach(ball=>ball.tick());
+    this.ballPile.forEach(ball=>{
+      ball.tick();
+      players.forEach((player)=>{
+        ball.checkAgainstPaddle(player);
+      });
+    });
+
     while(this.ballPile.length < players.count() / 2){
       this.ballPile.push(new Ball());
     }
