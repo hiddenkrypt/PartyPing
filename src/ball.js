@@ -18,5 +18,8 @@ module.exports = function(){
       this.tick();
     }
   };
+  this.outOfBounds = function(){
+    return this.y < 0 || this.y > 600;
+  };
 
 };

@@ -45,10 +45,10 @@ function addNewPlayer(socket, name){
   socket.on("sustain", function(key){
     switch(key){
       case "ArrowRight": case "d":
-        newPlayer.dx = 3;
+        newPlayer.dx = 4;
         break;
       case "ArrowLeft": case "a":
-        newPlayer.dx = -3;
+        newPlayer.dx = -4;
         break;
       case "ArrowUp": case "w":
         newPlayer.dy = 1;
@@ -83,9 +83,12 @@ var players = {
         return {x:ball.x, y:ball.y, size: ball.radius};
       }),
       paddles: teams.north.players.concat(teams.south.players).map(player=>{
-      //  console.log(player);
-        return {x:player.x, y:player.y,w:player.w, h:player.h, name:player.name};
-      })
+        return {x:player.x, y:player.y, w:player.w, h:player.h, name:player.name};
+      }),
+      scores: {
+        north: teams.south.concessions,
+        south: teams.north.concessions
+      }
     };
     teams.north.players.concat(teams.south.players).forEach((p)=>{
       p.socket.emit("gamestate", gameState);
@@ -105,11 +108,19 @@ var balls = {
     return this.ballPile.length;
   },
   tick: function(){
-    this.ballPile.forEach(ball=>{
+    this.ballPile.forEach((ball,i)=>{
       ball.tick();
       players.forEach((player)=>{
         ball.checkAgainstPaddle(player);
       });
+      if(ball.outOfBounds()){
+        if(ball.y < 0){
+          teams.north.concessions++;
+        } else{
+          teams.south.concessions++;
+        }
+        balls.ballPile.splice(i,1);
+      }
     });
 
     while(this.ballPile.length < players.count() / 2){
