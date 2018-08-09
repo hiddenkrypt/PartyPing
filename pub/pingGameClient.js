@@ -7,6 +7,8 @@ window.onload = function(){
   const namefield =  document.getElementById("namefield");
   const joinButton =  document.getElementById("join");
   const error =  document.getElementById("error");
+  const north = document.getElementById("north");
+  const south = document.getElementById("south");
   const socket = io();
   var gameState = {
     balls:[],
@@ -17,6 +19,8 @@ window.onload = function(){
 
   socket.on("gamestate", (gm)=>{
     gameState = gm;
+    north.innerHTML = gm.scores.north;
+    south.innerHTML = gm.scores.south;
   });
   socket.on("accepted", (response)=>{
     console.log("accepted to team: "+response.team);
@@ -53,6 +57,13 @@ window.onload = function(){
   function render(){
     ctx.fillStyle="#000";
     ctx.fillRect(0,0,canvas.width, canvas.height);
+    ctx.fillStyle = "#666";
+    ctx.fillRect(0,25,canvas.width,1);
+    ctx.fillRect(0,85,canvas.width,1);
+    ctx.fillRect(0,125,canvas.width,1);
+    ctx.fillRect(0,canvas.height-15,canvas.width,1);
+    ctx.fillRect(0,canvas.height-75,canvas.width,1);
+    ctx.fillRect(0,canvas.height-115,canvas.width,1);
     ctx.fillStyle = "#fff";
     gameState.balls.forEach((ball)=>{
       ctx.beginPath();
