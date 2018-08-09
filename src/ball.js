@@ -8,13 +8,15 @@ module.exports = function(){
     this.x += this.dx;
     this.y += this.dy;
     if(this.x-this.radius <= 0 || this.x+this.radius >= 600){
-      this.x -= this.dx;
       this.dx = -this.dx;
     }
   };
   this.radius = 5;
-  this.collideBox = function(box){
-    return collisions.circle_AABB(this, box);
+  this.checkAgainstPaddle = function(player){
+    if(collisions.circle_AABB(this, player)){
+      this.dy = -this.dy;
+      this.tick();
+    }
   };
 
 };
