@@ -1,65 +1,43 @@
 
 const Ball = require("./src/ball.js");
 const Player = require("./src/player.js");
-const GAME_SETTINGS = {
-  gamefield:{
-    width: 600,
-    height:600
-  },
-  playerMax:Number.POSITIVE_INFINITY,
-  hz: 20,
-  paddleCapacity: 150
-};
-const TEAMS = {
-  north: {
-    layers:[20, 80, 120],
-    concessions:0,
-    players: [],
-    startLayer: 0
-  },
-  south: {
-    layers:[GAME_SETTINGS.gamefield.height-120, GAME_SETTINGS.gamefield.height-80,GAME_SETTINGS.gamefield.height-20],
-    concessions:0,
-    players: [],
-    startLayer: 2
-  }
-};
+const GAME_SETTINGS = require("./src/gameSettings.js");
+const teams = require("./src/teams.js")(GAME_SETTINGS);
+
 module.exports = function(){
-
-  function attemptJoin(socket, name){
-    console.log("new player attempting to Join");
-    var players = TEAMS.north.players.concat(TEAMS.south.players);
-    if(players.find((player)=>{
-      return player.name === name;
-    })){
-      console.log("rejecting: name taken");
-      socket.emit("rejected", {reason: "Another player is using that name!"});
-    }
-    else if(players.size >= GAME_SETTINGS.playerMax){
-      console.log("rejecting: server full");
-      socket.emit("rejected", {reason: "Server is full!"});
-    } else{
-      console.log("player accepted!");
-      addNewPlayer(socket, name);
-    }
-  }
-
   return {
     attemptJoin: attemptJoin
   };
 };
 
+function attemptJoin(socket, name){
+  console.log("new player attempting to Join");
+  var players = teams.north.players.concat(teams.south.players);
+  if(players.find((player)=>{
+    return player.name === name;
+  })){
+    console.log("rejecting: name taken");
+    socket.emit("rejected", {reason: "Another player is using that name!"});
+  }
+  else if(players.size >= GAME_SETTINGS.playerMax){
+    console.log("rejecting: server full");
+    socket.emit("rejected", {reason: "Server is full!"});
+  } else{
+    console.log("player accepted!");
+    addNewPlayer(socket, name);
+  }
+}
 
 function addNewPlayer(socket, name){
-  var newPlayer = new Player(socket,name,TEAMS,GAME_SETTINGS);
+  var newPlayer = new Player(socket,name,teams,GAME_SETTINGS);
   socket.on( "disconnect", function() {
     console.log( `Client ${newPlayer.name} disconnected` );
     newPlayer.socket = null;
-    TEAMS[newPlayer.team].players = TEAMS[newPlayer.team].players.filter((player)=> player.name !== newPlayer.name);
+    teams[newPlayer.team].players = teams[newPlayer.team].players.filter((player)=> player.name !== newPlayer.name);
   });
-  TEAMS[newPlayer.team].players.push(newPlayer);
-  TEAMS[newPlayer.team].players.forEach(player=>{
-    player.w = GAME_SETTINGS.paddleCapacity/TEAMS[newPlayer.team].players.length;
+  teams[newPlayer.team].players.push(newPlayer);
+  teams[newPlayer.team].players.forEach(player=>{
+    player.w = GAME_SETTINGS.paddleCapacity/teams[newPlayer.team].players.length;
   });
   if(players.count() === 1){
     gameLogic();
@@ -67,10 +45,10 @@ function addNewPlayer(socket, name){
   socket.on("sustain", function(key){
     switch(key){
       case "ArrowRight": case "d":
-        newPlayer.dx = 2;
+        newPlayer.dx = 3;
         break;
       case "ArrowLeft": case "a":
-        newPlayer.dx = -2;
+        newPlayer.dx = -3;
         break;
       case "ArrowUp": case "w":
         newPlayer.dy = 1;
@@ -97,26 +75,27 @@ function addNewPlayer(socket, name){
 
 var players = {
   tick: function(){
-    TEAMS.north.players.concat(TEAMS.south.players).forEach((p)=>p.tick());
+    teams.north.players.concat(teams.south.players).forEach((p)=>p.tick());
   },
   update: function(){
     var gameState = {
       balls: balls.ballPile.map(ball=>{
         return {x:ball.x, y:ball.y, size: ball.radius};
       }),
-      paddles: TEAMS.north.players.concat(TEAMS.south.players).map(player=>{
+      paddles: teams.north.players.concat(teams.south.players).map(player=>{
       //  console.log(player);
         return {x:player.x, y:player.y,w:player.w, h:player.h, name:player.name};
       })
     };
-    TEAMS.north.players.concat(TEAMS.south.players).forEach((p)=>{
+    teams.north.players.concat(teams.south.players).forEach((p)=>{
       p.socket.emit("gamestate", gameState);
     });
   },
   count: function(){
-    return TEAMS.north.players.length + TEAMS.south.players.length;
+    return teams.north.players.length + teams.south.players.length;
   }
 };
+
 var balls = {
   ballPile: [],
   count: function(){
@@ -129,6 +108,7 @@ var balls = {
     }
   }
 };
+
 function gameLogic(){
   balls.tick();
   players.tick();
