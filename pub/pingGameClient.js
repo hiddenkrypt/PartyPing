@@ -74,16 +74,17 @@ window.onload = function(){
     ctx.fillRect(0,canvas.height-115,canvas.width,1);
 
     function drawPaddle(paddle){
-      if(paddle.team === myTeam){
+      if(paddle.team === "north"){
           ctx.fillStyle = "#66ff66";
       }
       else{
         ctx.fillStyle = "#ff66ff";
       }
-      if(paddle.name === myName){
-        ctx.fillStyle = "#00ff00";
-      }
       ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
+      if(paddle.name === myName){
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(paddle.x+4,paddle.y+4,paddle.w-8,paddle.h-8);
+      }
     }
     gameState.north.paddles.forEach(drawPaddle);
     gameState.south.paddles.forEach(drawPaddle);
