@@ -82,12 +82,17 @@ var players = {
       balls: balls.ballPile.map(ball=>{
         return {x:ball.x, y:ball.y, size: ball.radius};
       }),
-      paddles: teams.north.players.concat(teams.south.players).map(player=>{
-        return {x:player.x, y:player.y, w:player.w, h:player.h, name:player.name};
-      }),
-      scores: {
-        north: teams.south.concessions,
-        south: teams.north.concessions
+      north: {
+        paddles: teams.north.players.map(player=>{
+          return {x:player.x, y:player.y, w:player.w, h:player.h, name:player.name, team:"north"};
+        }),
+        score: teams.south.concessions
+      },
+      south: {
+        paddles: teams.south.players.map(player=>{
+          return {x:player.x, y:player.y, w:player.w, h:player.h, name:player.name, team:"south"};
+        }),
+        score: teams.north.concessions
       }
     };
     teams.north.players.concat(teams.south.players).forEach((p)=>{
