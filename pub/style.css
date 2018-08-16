@@ -22,6 +22,9 @@
 }
 #world{
   position:absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top:0;
   left:0;
   width:100%;
@@ -30,12 +33,22 @@
 }
 canvas{
   border: 2px solid #00ff00;
-  display:block;
+    /* display:block;
   margin-left:auto;
-  margin-right:auto;
+  margin-right:auto; */
 }
 .team{
+}
+#north{
+  /* border: 2px solid #66ff66; */
+  background-color: #66ff66;
+  color:#000;
   margin:30px;
-  text-align: center;
-  color: #00ff00;
+  padding:10px;
+}
+#south{
+  background-color: #ff66ff;
+  color:#000;
+  margin:30px;
+  padding:10px;
 }

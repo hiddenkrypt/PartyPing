@@ -26,8 +26,25 @@ window.onload = function(){
 
   socket.on("gamestate", (gm)=>{
     gameState = gm;
-    north.innerHTML = gm.north.score;
-    south.innerHTML = gm.south.score;
+    while (north.firstChild) {
+      north.removeChild(north.firstChild);
+    }
+    while (south.firstChild) {
+      south.removeChild(south.firstChild);
+    }
+    north.innerHTML = `NORTH: ${gm.north.score}<br>PLAYERS:<hr>`;
+    south.innerHTML = `SOUTH: ${gm.south.score}<br>PLAYERS:<hr>`;
+    gm.north.paddles.forEach(paddle=>{
+      var name = document.createElement("div");
+      name.innerHTML = paddle.name;
+      north.appendChild(name);
+    });
+    gm.south.paddles.forEach(paddle=>{
+      var name = document.createElement("div");
+      name.innerHTML = paddle.name;
+      south.appendChild(name);
+    });
+
   });
   socket.on("accepted", (response)=>{
     myTeam = response.team;
