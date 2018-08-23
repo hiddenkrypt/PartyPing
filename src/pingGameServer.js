@@ -27,18 +27,21 @@ function attemptJoin(socket, name){
     addNewPlayer(socket, name);
   }
 }
-
+function rebalancePaddles(){
+  teams[newPlayer.team].players.forEach(player=>{
+    player.w = GAME_SETTINGS.paddleCapacity/teams[newPlayer.team].players.length;
+  });
+}
 function addNewPlayer(socket, name){
   var newPlayer = new Player(socket,name,teams,GAME_SETTINGS);
   socket.on( "disconnect", function() {
     console.log( `Client ${newPlayer.name} disconnected` );
     newPlayer.socket = null;
     teams[newPlayer.team].players = teams[newPlayer.team].players.filter((player)=> player.name !== newPlayer.name);
+    rebalancePaddles();
   });
   teams[newPlayer.team].players.push(newPlayer);
-  teams[newPlayer.team].players.forEach(player=>{
-    player.w = GAME_SETTINGS.paddleCapacity/teams[newPlayer.team].players.length;
-  });
+  rebalancePaddles();
   if(players.count() === 1){
     gameLogic();
   }
