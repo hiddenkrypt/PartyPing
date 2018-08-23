@@ -28,6 +28,8 @@ Ball.prototype.tick = function(){
 Ball.prototype.checkAgainstPaddle = function(player){
   if(collisions.circle_AABB(this, player)){
     this.dy = -this.dy;
+    this.dx = this.dx * 1.01;
+    this.dy = this.dy * 1.01;
     this.tick();
   }
 };
