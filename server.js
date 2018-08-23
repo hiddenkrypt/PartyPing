@@ -1,5 +1,5 @@
 //node server start
-const PORT = 8082;
+const PORT = 22;
 const EXPRESS = require( 'express' );
 const APP = EXPRESS();
 const HTTP = require ( 'http' ).Server( APP );
@@ -19,13 +19,6 @@ IO.on ("connect", function( socket ) {
     GAME.attemptJoin(socket, name);
   });
 });
-
-// setTimeout(()=>{
-//   SERVER.shutdown(()=>{
-//     console.log("All cleaned up");
-//     process.exit();
-//   });
-// }, 2*60*1000);
 
 console.log("server running. Press 'q' then enter to quit.");
 var keypress = require('keypress');
