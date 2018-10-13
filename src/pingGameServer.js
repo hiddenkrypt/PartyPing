@@ -28,8 +28,11 @@ function attemptJoin(socket, name){
   }
 }
 function rebalancePaddles(){
-  teams[newPlayer.team].players.forEach(player=>{
-    player.w = GAME_SETTINGS.paddleCapacity/teams[newPlayer.team].players.length;
+  teams.north.players.forEach(player=>{
+    player.w = GAME_SETTINGS.paddleCapacity/teams.north.players.length;
+  });
+  teams.south.players.forEach(player=>{
+    player.w = GAME_SETTINGS.paddleCapacity/teams.south.players.length;
   });
 }
 function addNewPlayer(socket, name){
